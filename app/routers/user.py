@@ -7,6 +7,7 @@ from .. import oauth2
 
 router = APIRouter(prefix="/api/users", tags=["Users"])
 
+
 @router.get(
     "/", status_code=status.HTTP_200_OK, response_model=List[schema.UserResponse]
 )
@@ -38,7 +39,6 @@ def get_user(
 def create_user(
     user: schema.UserCreate,
     db: Session = Depends(get_db),
-    current_user: int = Depends(oauth2.get_current_user),
 ):
     hashed_password = utils.hash(user.password)
     user.password = hashed_password

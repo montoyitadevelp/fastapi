@@ -10,23 +10,23 @@ router = APIRouter(prefix="/api/posts", tags=["Posts"])
 
 
 @router.get(
-    "/", status_code=status.HTTP_200_OK, response_model=List[schema.VotesResponse]
+    "/", status_code=status.HTTP_200_OK, response_model=List[schema.PostResponse]
 )
 def get_posts(
     db: Session = Depends(get_db),
-    current_user: int = Depends(oauth2.get_current_user),
     limit: int = 10,
     skip: int = 0,
     search: Optional[str] = "",
 ):
-    posts = (
+    posts = db.query(models.Post).all()
+    """     posts = (
         db.query(models.Post)
         .filter(models.Post.title.contains(search))
         .limit(limit)
         .offset(skip)
         .all()
-    )
-    posts_voting = (
+    ) """
+    """     posts_voting = (
         db.query(models.Post, func.count(models.Votes.post_id).label("votes"))
         .join(models.Votes, models.Votes.post_id == models.Post.id, isouter=True)
         .group_by(models.Post.id)
@@ -35,7 +35,9 @@ def get_posts(
         .offset(skip)
         .all()
     )
-    return posts_voting
+    """
+    return posts
+
 
 
 @router.post(
