@@ -5,6 +5,7 @@ from ..database import get_db
 
 router = APIRouter(prefix="/api/votes", tags=["Votes"])
 
+
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def votes(
     vote: schema.Votes,
